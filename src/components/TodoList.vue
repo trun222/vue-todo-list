@@ -4,14 +4,14 @@
       <v-text-field :label="setTodoListLabel" v-model="todo" v-on:keyup.enter="handleAddTodo" box hide-details />
     </div>
     <div v-if="getTodos.length > 0" class="todo-list-container">
-      <ul class="list">
-        <li v-for="(todo, index) in getTodos" :key="todo">
+      <transition-group name="move" class="list" tag="ul">
+        <li v-for="(todo, index) in getTodos" :key="todo.id">
           <v-layout align-start fill-height>
             <v-flex class="list-text" xs10>
-            {{ `${index+1}.` }} {{ todo }}
+            {{ `${index+1}.` }} {{ todo.text }}
             </v-flex>
             <v-flex xs2>
-              <v-btn icon small>
+              <v-btn @click="handleRemoveTodo(index)" icon small>
                 <v-icon color="red">
                   delete
                 </v-icon>
@@ -19,12 +19,14 @@
             </v-flex>
           </v-layout>
         </li>
-      </ul>
+      </transition-group>
     </div>
   </div>
 </template>
 
 <script>
+import uuidv4 from 'uuid/v4';
+
 export default {
   name: 'TodoList',
   data() {
@@ -46,10 +48,17 @@ export default {
     handleAddTodo() {
       if (this.todo) {
         // Add the Todo
-        this.todos.push(this.todo);
+        this.todos = [{ text: this.todo, id: uuidv4() }, ...this.todos];
         // Reset the text for adding a todo
         this.todo = '';
       }
+    },
+    handleRemoveTodo(index) {
+      this.todos = this.todos.filter((todo, i) => {
+        if(index !== i) {
+          return todo;
+        }
+      });
     }
   }
 }
@@ -105,26 +114,17 @@ export default {
         width: auto
         &:nth-child(2n)
           background: #d3d3d3
-        &:hover
-          background: #0e131871
 
 
 /* Todo List Animations */
-.move-enter
-  opacity: 0.01
-  transform: translate(-40px, 0)
-
 .move-enter-active
-  opacity: 1
-  transform: translate(0, 0)
-  transition: all 500ms ease-in
-
-.move-exit
-  opacity: 1
-  transform: translate(0, 0)
-
-.move-exit-active
+  opacity: 0.2
+  transform: translate(-40px, 0)
+  transition-type: ease-in
+  transition-duration: 100ms
+  transition-delay: 0ms
+.move-leave-active
   opacity: 0.01
   transform: translate(40px, 0)
-  transition: all 500ms ease-in
+  transition: all 300ms ease-in
 </style>
