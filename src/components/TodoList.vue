@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="color-picker">
-      <input v-model="color" type="color"></input>
+      <input v-model="color" type="color" />
     </div>
     <div class="todo-list-component">
       <div class="add-todo-container">
