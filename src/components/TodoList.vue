@@ -1,25 +1,30 @@
 <template>
-  <div class="todo-list-component">
-    <div class="add-todo-container">
-      <v-text-field :label="setTodoListLabel" v-model="todo" v-on:keyup.enter="handleAddTodo" box hide-details />
+  <div>
+    <div class="color-picker">
+      <input v-model="color" type="color"></input>
     </div>
-    <div v-if="getTodos.length > 0" class="todo-list-container">
-      <transition-group name="move" class="list" tag="ul">
-        <li v-for="(todo, index) in getTodos" :key="todo.id">
-          <v-layout align-start fill-height>
-            <v-flex class="list-text" xs10>
-            {{ `${index+1}.` }} {{ todo.text }}
-            </v-flex>
-            <v-flex xs2>
-              <v-btn @click="handleRemoveTodo(index)" icon small>
-                <v-icon color="red">
-                  delete
-                </v-icon>
-              </v-btn>
-            </v-flex>
-          </v-layout>
-        </li>
-      </transition-group>
+    <div class="todo-list-component">
+      <div class="add-todo-container">
+        <v-text-field :label="setTodoListLabel" v-model="todo" v-on:keyup.enter="handleAddTodo" box hide-details />
+      </div>
+      <div v-if="getTodos.length > 0" class="todo-list-container">
+        <transition-group name="move" class="list" tag="ul">
+          <li v-for="(todo, index) in getTodos" :key="todo.id" :style="{ background: index % 2 === 1 ? color : '#ffff'}">
+            <v-layout align-start fill-height>
+              <v-flex class="list-text" xs10>
+              {{ `${index+1}.` }} {{ todo.text }}
+              </v-flex>
+              <v-flex xs2>
+                <v-btn @click="handleRemoveTodo(index)" icon small>
+                  <v-icon color="red">
+                    delete
+                  </v-icon>
+                </v-btn>
+              </v-flex>
+            </v-layout>
+          </li>
+        </transition-group>
+      </div>
     </div>
   </div>
 </template>
@@ -31,8 +36,9 @@ export default {
   name: 'TodoList',
   data() {
     return {
-      todo: '',
+      color: '#d3d3d3'
       todos: []
+      todo: '',
     }
   },
   computed: {
@@ -41,7 +47,7 @@ export default {
     },
     // When the label 'changed' i.e. a todo is added to an empty todo list, update the label
     setTodoListLabel() {
-      return this.getTodos.length === 0 ? "Todos" : `Todos (${this.getTodos.length})`;
+      return this.getTodos.length === 0 ? "Todo" : `Todos (${this.getTodos.length})`;
     }
   },
   methods: {
@@ -115,12 +121,11 @@ export default {
         &:nth-child(2n)
           background: #d3d3d3
 
-
 /* Todo List Animations */
 .move-enter-active
   opacity: 0.2
   transform: translate(-40px, 0)
-  transition-type: ease-in
+  transition: ease-in
   transition-duration: 100ms
   transition-delay: 0ms
 .move-leave-active
