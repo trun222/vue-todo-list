@@ -36,9 +36,9 @@ export default {
   name: 'TodoList',
   data() {
     return {
-      color: '#d3d3d3'
-      todos: []
-      todo: '',
+      color: '#d3d3d3',
+      todos: [],
+      todo: ''
     }
   },
   computed: {
