@@ -6,4 +6,4 @@ steps:
     image: node
     commands:
       - npm install
-      - npm run serve
+      - npm run build
