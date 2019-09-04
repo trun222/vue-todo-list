@@ -1,12 +1,19 @@
 kind: pipeline
+type: docker
 name: default
+
+platform:
+  os: linux
+  arch: arm64
 
 steps:
   - name: test
     image: node
     commands:
-      - npm install
-      - npm run build
+    - npm install
+    - npm run build
 trigger:
   branch:
-    - master
+  - master
+  event:
+  - push
